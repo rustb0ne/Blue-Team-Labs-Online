@@ -1,10 +1,4 @@
-# Follina (CVE-2022-30190) Analysis
-
-This writeup documents the analysis of a malicious Office document exploiting the Follina vulnerability, a remote code execution flaw in Microsoft's Support Diagnostic Tool (MSDT).
-
----
-
-# Question 1) What is the SHA1 hash value of the sample? (Format: SHA1Hash)
+# Question 1) What is the SHA1 hash value of the sample?
 
 Uploaded `sample.doc` to VirusTotal to retrieve its SHA1 hash digest.
 
@@ -34,7 +28,7 @@ To find which XML file contains the extracted URL, I first attempted to dump `sa
 
 ![[img3.png]]
 
-Tried using `catdoc` to extract text:
+Then I tried using `catdoc` to extract text:
 
 ![[img4.png]]
 
@@ -47,13 +41,13 @@ Answer: document.xml.rels
 
 # Question 5) The extracted URL accesses a HTML file that triggers the vulnerability to execute a malicious payload. According to the HTML processing functions, any files with fewer than <Number> bytes would not invoke the payload
 
-Attempted to access the URL, but the server is down. After researching CVE-2022-30190 (Follina), I found relevant analysis from multiple sources:
+Attempted to access the URL, but the server is down. After researching CVE-2022-30190 (Follina), I found relevant technical analysis from multiple sources:
 
 - https://asec.ahnlab.com/en/34998/
 - https://www.deepwatch.com/labs/customer-advisory-microsoft-office-used-to-exploit-follina-cve-2022-30190-an-rce-vulnerability-in-microsofts-support-diagnostic-tool/
 - https://www.huntress.com/blog/microsoft-office-remote-code-execution-follina-msdt-bug
 
-These resources indicate that the HTML processing function requires a minimum file size of 4096 bytes for the payload to execute. Files smaller than this threshold will not trigger the exploit.
+These resources indicate that the HTML processing function requires a minimum file size of 4096 bytes for the payload to execute. Files smaller than this threshold will not trigger the exploit
 
 Answer: 4096
 
@@ -71,22 +65,21 @@ Answer: msdt.exe
 
 # Question 7) You were asked to write a process-based detection rule using Windows Event ID 4688. What would be the ProcessName and ParentProcessname used in this detection rule?
 
-Event ID 4688 signifies a new process has been created on a Windows system
-Continue with Any.Run sandbox sample
+Event ID 4688 signifies that a new process has been created on a Windows system. Continuing with the Any.Run sandbox sample:
 
 ![alt text](img8.png)
 
-From these process, I found a suspicious parent and child process 
-Normally, Microsoft Word (WINWORD.EXE) rarely excutes Diagnose tool (msdt.exe)
+From the process tree, I found a suspicious parent and child process relationship. Normally, Microsoft Word (WINWORD.EXE) rarely executes the Diagnostic Tool (msdt.exe).
 
 Answer: msdt.exe, WINWORD.EXE
 
 # Question8) Submit the MITRE technique ID used by the sample for Execution
 
-Back to VirusTotal, under Behaviour tab
+Going back to VirusTotal, under the Behavior tab:
+
 ![alt text](img9.png)
 
-Respectly try these code, i found the answer
+After examining the behavior patterns, I identified the MITRE technique used.
 
 Answer: T1559
 
