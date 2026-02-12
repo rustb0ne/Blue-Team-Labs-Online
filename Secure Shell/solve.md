@@ -50,8 +50,8 @@ The log file contains numerous entries marked as `debug1`, `debug2`, and `debug3
 
 Based on the OpenSSH architecture for Windows:
 
-Configuration files and logs (equivalent to `/etc` and `/var/log` on Linux) are redirected to `C:\ProgramData\ssh\`.
+Configuration files and logs (equivalent to `/etc` and `/var/log` on Linux) are redirected to `C:\ProgramData\ssh\`
 
-The default log filename follows the service name (sshd), resulting in `sshd.log`.
+The default log filename follows the service name (sshd), resulting in `sshd.log`
 
 Therefore, the log file path is: C:\ProgramData\ssh\logs\sshd.log
